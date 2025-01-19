@@ -5,8 +5,8 @@ using SalesDatePredictionProject.Server.Models;
 
 namespace SalesDatePredictionProject.Server.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class EmployeesController : Controller
     {
         private readonly IEmployeesRepository _employeesRepository;
