@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SalesDatePredictionProject.Server.Interfaces;
 using SalesDatePredictionProject.Server.Models;
 
@@ -10,18 +9,15 @@ namespace SalesDatePredictionProject.Server.Controllers
     public class EmployeesController : Controller
     {
         private readonly IEmployeesRepository _employeesRepository;
-        private readonly IMapper _mapper;
 
-        public EmployeesController(IEmployeesRepository employeesRepository,
-            IMapper mapper)
+        public EmployeesController(IEmployeesRepository employeesRepository)
         {
             _employeesRepository = employeesRepository;
-            _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetEmployees")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Employees>))]
-        public IActionResult GetEmployees()
+        public IActionResult Get()
         {
             var employees = _employeesRepository.GetEmployees();
 

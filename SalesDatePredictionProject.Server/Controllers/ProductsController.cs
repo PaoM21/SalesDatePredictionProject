@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SalesDatePredictionProject.Server.Interfaces;
 using SalesDatePredictionProject.Server.Models;
 
@@ -10,18 +9,15 @@ namespace SalesDatePredictionProject.Server.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductsRepository _productsRepository;
-        private readonly IMapper _mapper;
 
-        public ProductsController(IProductsRepository productsRepository,
-            IMapper mapper)
+        public ProductsController(IProductsRepository productsRepository)
         {
             _productsRepository = productsRepository;
-            _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetProducts")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Products>))]
-        public IActionResult GetProducts()
+        public IActionResult Get()
         {
             var products = _productsRepository.GetProducts();
 
