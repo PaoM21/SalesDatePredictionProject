@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SalesDatePredictionProject.Server.Dto;
 using SalesDatePredictionProject.Server.Interfaces;
 
@@ -10,18 +9,15 @@ namespace SalesDatePredictionProject.Server.Controllers
     public class CustomersController : Controller
     {
         private readonly ICustomersRepository _customersRepository;
-        private readonly IMapper _mapper;
 
-        public CustomersController(ICustomersRepository customersRepository,
-            IMapper mapper)
+        public CustomersController(ICustomersRepository customersRepository)
         {
             _customersRepository = customersRepository;
-            _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetCustomerOrderPredictions")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<OrderPredictionDto>))]
-        public IActionResult GetCustomerOrderPredictions()
+        public IActionResult Get()
         {
             var orderPredictions = _customersRepository.GetCustomerOrderPredictions();
 

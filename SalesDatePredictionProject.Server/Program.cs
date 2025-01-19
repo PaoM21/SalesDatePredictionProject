@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using SalesDatePredictionProject.Server.Data;
+using SalesDatePredictionProject.Server.Interfaces;
+using SalesDatePredictionProject.Server.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

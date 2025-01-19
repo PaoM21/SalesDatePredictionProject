@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SalesDatePredictionProject.Server.Dto;
 using SalesDatePredictionProject.Server.Interfaces;
 using SalesDatePredictionProject.Server.Models;
-using SalesDatePredictionProject.Server.Repository;
 
 namespace SalesDatePredictionProject.Server.Controllers
 {
@@ -12,23 +10,17 @@ namespace SalesDatePredictionProject.Server.Controllers
     public class OrdersController : Controller
     {
         private readonly IOrdersRepository _ordersRepository;
-        private readonly IProductsRepository _productsRepository;
-        private readonly IMapper _mapper;
 
         public OrdersController(
-            IOrdersRepository ordersRepository,
-            IProductsRepository productsRepository,
-            IMapper mapper)
+            IOrdersRepository ordersRepository)
         {
             _ordersRepository = ordersRepository;
-            _productsRepository = productsRepository;
-            _mapper = mapper;
         }
 
-        [HttpGet("{custId}")]
+        [HttpGet("{custId}", Name = "GetOrdersByCustom")]
         [ProducesResponseType(200, Type = typeof(ICollection<Orders>))]
         [ProducesResponseType(400)]
-        public IActionResult GetOrdersByCustom(int custId)
+        public IActionResult Get(int custId)
         {
             if (!_ordersRepository.CustomerExists(custId))
                 return NotFound();
@@ -41,10 +33,10 @@ namespace SalesDatePredictionProject.Server.Controllers
             return Ok(ordersByCustom);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateOrderWithProduct")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateOrderWithProduct([FromBody] OrderProductDto orderProduct)
+        public IActionResult Post([FromBody] OrderProductDto orderProduct)
         {
             if (orderProduct == null)
                 return BadRequest(ModelState);
@@ -54,7 +46,7 @@ namespace SalesDatePredictionProject.Server.Controllers
 
             var OrderCreated = _ordersRepository.CreateOrderWithProduct(orderProduct);
 
-            if (OrderCreated == null || OrderCreated == default(int))
+            if (OrderCreated == default)
             {
                 ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
