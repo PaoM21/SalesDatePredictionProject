@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SalesDatePredictionProject.Server.Dto;
 using SalesDatePredictionProject.Server.Interfaces;
-using SalesDatePredictionProject.Server.Models;
 
 namespace SalesDatePredictionProject.Server.Controllers
 {
@@ -9,17 +10,20 @@ namespace SalesDatePredictionProject.Server.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductsRepository _productsRepository;
+        private readonly IMapper _mapper;
 
-        public ProductsController(IProductsRepository productsRepository)
+        public ProductsController(IProductsRepository productsRepository,
+            IMapper mapper)
         {
             _productsRepository = productsRepository;
+            _mapper = mapper;
         }
 
         [HttpGet(Name = "GetProducts")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Products>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ProductDto>))]
         public IActionResult Get()
         {
-            var products = _productsRepository.GetProducts();
+            var products = _mapper.Map<List<ProductDto>>(_productsRepository.GetProducts());
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

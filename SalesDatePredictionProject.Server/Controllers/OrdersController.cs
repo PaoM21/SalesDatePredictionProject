@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using SalesDatePredictionProject.Server.Dto;
 using SalesDatePredictionProject.Server.Interfaces;
 using SalesDatePredictionProject.Server.Models;
@@ -10,15 +11,20 @@ namespace SalesDatePredictionProject.Server.Controllers
     public class OrdersController : Controller
     {
         private readonly IOrdersRepository _ordersRepository;
+        private readonly IProductsRepository _productsRepository;
+        private readonly IMapper _mapper;
 
-        public OrdersController(
-            IOrdersRepository ordersRepository)
+        public OrdersController(IOrdersRepository ordersRepository,
+            IProductsRepository productsRepository,
+            IMapper mapper)
         {
             _ordersRepository = ordersRepository;
+            _productsRepository = productsRepository;
+            _mapper = mapper;
         }
 
         [HttpGet("{custId}", Name = "GetOrdersByCustom")]
-        [ProducesResponseType(200, Type = typeof(ICollection<Orders>))]
+        [ProducesResponseType(200, Type = typeof(ICollection<OrderDto>))]
         [ProducesResponseType(400)]
         public IActionResult Get(int custId)
         {
@@ -26,11 +32,12 @@ namespace SalesDatePredictionProject.Server.Controllers
                 return NotFound();
 
             var ordersByCustom = _ordersRepository.GetOrdersByCustom(custId);
+            var ordersDto = _mapper.Map<ICollection<OrderDto>>(ordersByCustom);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(ordersByCustom);
+            return Ok(ordersDto);
         }
 
         [HttpPost(Name = "CreateOrderWithProduct")]
