@@ -17,35 +17,39 @@ namespace SalesDatePredictionProject.Server.Repository
         {
             var query = @"
                 WITH CTE0 AS (
-                    SELECT MAX(orderdate) AS LastOrderDate, custid, orderdate
+                    SELECT
+	                custid, 
+	                orderdate,
+	                DATEDIFF(DAY, LAG(orderdate) OVER (PARTITION BY custid ORDER BY orderdate),  orderdate) AS DiasEntreOrdenes
                     FROM Sales.Orders
-                    GROUP BY custid, orderdate
-                ), 
+                ),
                 CTE1 AS (
-                    SELECT
-                        custid,
-                        LastOrderDate,
-                        LAG(orderdate) OVER (PARTITION BY custid ORDER BY orderdate) AS FechaAnterior,
-                        ROW_NUMBER() OVER (PARTITION BY custid ORDER BY LastOrderDate DESC) AS RN
-                    FROM CTE0
-                ), 
+	                SELECT AVG(DiasEntreOrdenes) AS DiasPromedio,
+		                custid
+	                FROM CTE0
+	                WHERE DiasEntreOrdenes IS NOT NULL
+	                GROUP BY custid
+                ),
                 CTE2 AS (
-                    SELECT
-                        c.custid,
-                        AVG(DATEDIFF(DAY, c.FechaAnterior, c.LastOrderDate)) AS PromedioDias
-                    FROM CTE1 c
-                    WHERE c.FechaAnterior IS NOT NULL
-                    GROUP BY c.custid
+	                SELECT orderdate, 
+	                custid
+	                FROM 
+		                (SELECT ROW_NUMBER() OVER (PARTITION BY custid ORDER BY orderdate DESC) AS RN,
+			                custid,
+			                orderdate
+		                FROM Sales.Orders) AS OrderByCustom
+	                WHERE RN = 1
                 )
-                SELECT 
-                    Cu.companyname,
-                    c1.LastOrderDate,
-                    DATEADD(DAY, c2.PromedioDias, c1.LastOrderDate) AS NextPredictedOrder
-                FROM CTE1 c1
-                JOIN CTE2 c2 ON c1.custid = c2.custid
-                JOIN Sales.Customers AS Cu ON c1.custid = Cu.custid
-                WHERE c1.RN = 1
-                ORDER BY companyname;";
+                SELECT CTE2.custid,
+	                Cu.companyname AS CustomerName,
+	                orderdate AS LastOrderDate,
+	                DATEADD(DAY, DiasPromedio, orderdate) AS NextPredictedOrder
+                FROM CTE2
+                INNER JOIN Sales.Customers AS Cu 
+	                ON Cu.custid = CTE2.custid
+                INNER JOIN CTE1 
+	                ON CTE1.custid = CTE2.custid
+                ORDER BY CustomerName";
 
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
@@ -58,9 +62,10 @@ namespace SalesDatePredictionProject.Server.Repository
                     {
                         predictions.Add(new OrderPredictionDto
                         {
-                            CompanyName = result.GetString(0),
-                            LastOrderDate = result.GetDateTime(1),
-                            NextPredictedOrder = result.GetDateTime(2)
+                            CustId = result.GetInt32(0),
+                            CompanyName = result.GetString(1),
+                            LastOrderDate = result.GetDateTime(2),
+                            NextPredictedOrder = result.GetDateTime(3)
                         });
                     }
                     return predictions;

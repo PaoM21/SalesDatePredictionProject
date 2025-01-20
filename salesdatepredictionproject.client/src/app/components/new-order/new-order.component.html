@@ -1,0 +1,116 @@
+<form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="empId">Employee Id:</label>
+    <input id="empId" type="number" formControlName="empId" />
+    <div *ngIf="orderForm.get('empId')?.invalid && orderForm.get('empId')?.touched">
+      Employee Id is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="shipperId">Shipper Id:</label>
+    <input id="shipperId" type="number" formControlName="shipperId" />
+    <div *ngIf="orderForm.get('shipperId')?.invalid && orderForm.get('shipperId')?.touched">
+      Shipper Id is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="shipName">Shipper Name:</label>
+    <input id="shipName" formControlName="shipName" />
+    <div *ngIf="orderForm.get('shipName')?.invalid && orderForm.get('shipName')?.touched">
+      Shipper Name is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="shipAddress">Shipper Address:</label>
+    <input id="shipAddress" formControlName="shipAddress" />
+    <div *ngIf="orderForm.get('shipAddress')?.invalid && orderForm.get('shipAddress')?.touched">
+      Shipper Address is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="shipCity">Shipper City:</label>
+    <input id="shipCity" formControlName="shipCity" />
+    <div *ngIf="orderForm.get('shipCity')?.invalid && orderForm.get('shipCity')?.touched">
+      Shipper City is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="orderDate">Order Date:</label>
+    <input id="orderDate" type="date" formControlName="orderDate" />
+    <div *ngIf="orderForm.get('orderDate')?.invalid && orderForm.get('orderDate')?.touched">
+      Order Date is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="requiredDate">Required Date:</label>
+    <input id="requiredDate" type="date" formControlName="requiredDate" />
+    <div *ngIf="orderForm.get('requiredDate')?.invalid && orderForm.get('requiredDate')?.touched">
+      Required Date is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="shippedDate">Shipper Date:</label>
+    <input id="shippedDate" type="date" formControlName="shippedDate" />
+    <div *ngIf="orderForm.get('shippedDate')?.invalid && orderForm.get('shippedDate')?.touched">
+      Shipper Date is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="freight">Freight:</label>
+    <input id="freight" type="number" formControlName="freight" />
+    <div *ngIf="orderForm.get('freight')?.invalid && orderForm.get('freight')?.touched">
+      Freight is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="shipCountry">Shipper Country:</label>
+    <input id="shipCountry" formControlName="shipCountry" />
+    <div *ngIf="orderForm.get('shipCountry')?.invalid && orderForm.get('shipCountry')?.touched">
+      Shipper Country is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="productId">Product Id:</label>
+    <input id="productId" type="number" formControlName="productId" />
+    <div *ngIf="orderForm.get('productId')?.invalid && orderForm.get('productId')?.touched">
+      Product Id is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="unitPrice">Price:</label>
+    <input id="unitPrice" type="number" formControlName="unitPrice" />
+    <div *ngIf="orderForm.get('unitPrice')?.invalid && orderForm.get('unitPrice')?.touched">
+      Price must be at least 0.01.
+    </div>
+  </div>
+
+  <div>
+    <label for="qty">Quantity:</label>
+    <input id="qty" type="number" formControlName="qty" />
+    <div *ngIf="orderForm.get('qty')?.invalid && orderForm.get('qty')?.touched">
+      Quantity must be at least 1.
+    </div>
+  </div>
+
+  <div>
+    <label for="discount">Discount:</label>
+    <input id="discount" type="number" formControlName="discount" />
+    <div *ngIf="orderForm.get('discount')?.invalid && orderForm.get('discount')?.touched">
+      Discount must be at least 1.
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="orderForm.invalid">Submit</button>
+  <a [routerLink]="['/']">Inicio</a>
+</form>

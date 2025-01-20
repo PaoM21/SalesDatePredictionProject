@@ -1,0 +1,26 @@
+<h1 id="tableLabel">Customers</h1>
+
+<p *ngIf="!customersList"><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
+
+<table *ngIf="customersList">
+  <thead>
+    <tr>
+      <th>Company Name</th>
+      <th>Last Order Date</th>
+      <th>Next Predicted Order</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let customer of customersList">
+      <td>{{ customer.companyName }}</td>
+      <td>{{ customer.lastOrderDate }}</td>
+      <td>{{ customer.nextPredictedOrder }}</td>
+      <td>
+        <a [routerLink]="['/orders', customer.custId]">View Orders</a>
+        <br />
+        <a [routerLink]="['/new-order', customer.custId]">New Order</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

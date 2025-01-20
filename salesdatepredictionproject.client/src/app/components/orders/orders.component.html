@@ -1,0 +1,28 @@
+<h1 id="tableLabel">Customers</h1>
+
+<p *ngIf="!orders"><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
+
+<table *ngIf="orders">
+  <thead>
+    <tr>
+      <th>ORDER ID</th>
+      <th>REQUIRED DATE</th>
+      <th>SHIPPED DATE</th>
+      <th>SHIP NAME</th>
+      <th>SHIP ADDRESS</th>
+      <th>SHIP CITY</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of orders">
+      <td>{{ order.orderId }}</td>
+      <td>{{ order.requiredDate }}</td>
+      <td>{{ order.shippedDate }}</td>
+      <td>{{ order.shipName }}</td>
+      <td>{{ order.shipAddress }}</td>
+      <td>{{ order.shipCity }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<a [routerLink]="['/']">Inicio</a>
