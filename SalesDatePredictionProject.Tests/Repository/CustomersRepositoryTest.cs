@@ -16,14 +16,14 @@ namespace SalesDatePredictionProject.Tests.Repository
             var databaseContext = new DataContext(options);
             databaseContext.Database.EnsureCreated();
 
-            if (await databaseContext.Customers.CountAsync() < default(int))
+            if (await databaseContext.Customers.CountAsync() == 0)
             {
                 for (int i = 0; i < 10; i++)
                 {
                     databaseContext.Customers.Add(
                         new Customers()
                         {
-                            CustId = 1,
+                            CustId = i + 1,
                             CompanyName = "Codifico",
                             ContactName = "Amanda",
                             ContactTitle = "Mobile",
@@ -56,7 +56,7 @@ namespace SalesDatePredictionProject.Tests.Repository
             //Assert
             result.Should().NotBeNull();
             result.Should().AllBeOfType<Customers>();
-            result.Should().BeOfType<ICollection<Customers>>();
+            result.Should().BeAssignableTo<ICollection<Customers>>();
         }
     }
 }

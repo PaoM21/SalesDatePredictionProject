@@ -39,7 +39,8 @@ namespace SalesDatePredictionProject.Tests.Controllers
             // Assert
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
-            okResult.Value.Should().BeEquivalentTo(productsDto);
+            okResult.Should().NotBeNull();
+            okResult!.Value.Should().BeEquivalentTo(productsDto);
         }
     }
 }

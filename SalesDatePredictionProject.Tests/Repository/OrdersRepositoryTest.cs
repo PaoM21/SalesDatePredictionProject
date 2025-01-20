@@ -16,14 +16,14 @@ namespace SalesDatePredictionProject.Tests.Repository
             var databaseContext = new DataContext(options);
             databaseContext.Database.EnsureCreated();
 
-            if (await databaseContext.Orders.CountAsync() < default(int))
+            if (await databaseContext.Orders.CountAsync() == 0)
             {
                 for (int i = 0; i < 10; i++)
                 {
                     databaseContext.Orders.Add(
                         new Orders()
                         {
-                            OrderId = 1,
+                            OrderId = i + 1,
                             CustId = 1,
                             EmpId = 1,
                             OrderDate = DateTime.Now,
@@ -47,7 +47,7 @@ namespace SalesDatePredictionProject.Tests.Repository
         }
 
         [Fact]
-        public async void OrdersRepository_GetOrdersByCustom_ReturnsICollection()
+        public async Task OrdersRepository_GetOrdersByCustom_ReturnsICollection()
         {
             //Arrange
             var dbContext = await GetDbContext();
@@ -64,7 +64,7 @@ namespace SalesDatePredictionProject.Tests.Repository
         }
 
         [Fact]
-        public async void OrdersRepository_GetOrders_ReturnsICollection()
+        public async Task OrdersRepository_GetOrders_ReturnsICollection()
         {
             //Arrange
             var dbContext = await GetDbContext();
@@ -79,7 +79,7 @@ namespace SalesDatePredictionProject.Tests.Repository
         }
 
         [Fact]
-        public async void OrdersRepository_CustomerExists_ReturnsBool()
+        public async Task OrdersRepository_CustomerExists_ReturnsBool()
         {
             //Arrange
             var dbContext = await GetDbContext();
@@ -94,15 +94,15 @@ namespace SalesDatePredictionProject.Tests.Repository
         }
 
         [Fact]
-        public async void OrdersRepository_OrderExists_ReturnsBool()
+        public async Task OrdersRepository_OrderExists_ReturnsBool()
         {
             //Arrange
             var dbContext = await GetDbContext();
             var ordersRepository = new OrdersRepository(dbContext);
-            int orerId = 1;
+            int orderId = 1;
 
             //Act
-            var result = ordersRepository.OrderExists(orerId);
+            var result = ordersRepository.OrderExists(orderId);
 
             //Assert
             result.Should().BeTrue();

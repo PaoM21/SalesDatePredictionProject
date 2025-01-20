@@ -30,13 +30,19 @@ namespace SalesDatePredictionProject.Tests.Controllers
         public void OrdersController_GetOrdersByCustom_ReturnsSuccess()
         {
             //Arrange
-            var orders = A.Fake<OrderDto>();
+            var orders = A.CollectionOfFake<OrderDto>(5).ToList();
             var custId = 1;
-            A.CallTo(() => _mapper.Map<List<OrderDto>>(_ordersRepository.GetOrdersByCustom(custId)));
+            var ordersList = A.CollectionOfFake<Orders>(5).ToList();
+            A.CallTo(() => _ordersRepository.GetOrdersByCustom(custId)).Returns(ordersList);
+            A.CallTo(() => _mapper.Map<List<OrderDto>>(ordersList)).Returns(orders);
+
             //Act
-            var result = _ordersController.Get(custId);
+            var result = _ordersController.Get(custId) as OkObjectResult;
+
             //Assert
-            result.Should().BeOfType<IActionResult>();
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(200);
+            result.Value.Should().BeEquivalentTo(orders);
         }
     }
 }

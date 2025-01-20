@@ -17,6 +17,7 @@ namespace SalesDatePredictionProject.Tests.Controllers
         {
             //Dependencies
             _customersRepository = A.Fake<ICustomersRepository>();
+            _mapper = A.Fake<IMapper>();
 
             //SUT
             _customersController = new CustomersController(_customersRepository, _mapper);
@@ -35,6 +36,5 @@ namespace SalesDatePredictionProject.Tests.Controllers
             // Assert
             result.Should().BeOfType<OkObjectResult>();
         }
-
     }
 }
